@@ -5,17 +5,17 @@ import redis
 
 class RedisQueue:
     def __init__(self, queue_name):
-        self._r = redis.Redis(
+        self.__r = redis.Redis(
             host="localhost",
             port=6379
         )
         self.queue_name = queue_name
 
     def publish(self, msg: dict):
-        self._r.rpush(self.queue_name, json.dumps(msg))
+        self.__r.rpush(self.queue_name, json.dumps(msg))
 
     def consume(self) -> dict:
-        response = self._r.blpop(self.queue_name)
+        response = self.__r.blpop(self.queue_name)
         if response:
             return json.loads(response[1])
         return None
